@@ -22,6 +22,7 @@ import logging
 import json
 import datetime
 
+import pytz
 import requests
 
 from django.conf import settings
@@ -174,7 +175,7 @@ def notify():
 
     directors = get_directors_group().user_set.values_list('email', flat=True)
 
-    offline_cutoff = datetime.datetime.now() - datetime.timedelta(days=14)
+    offline_cutoff = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=14)
 
     for pos in POS.objects.all():
         # If the POS is reinforced send an email to all directors
