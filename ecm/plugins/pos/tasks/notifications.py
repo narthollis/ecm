@@ -172,7 +172,7 @@ def notify():
         except Exception, e:
             pass
 
-    directors = get_directors_group().user_set.values_list('emails', flat=True)
+    directors = get_directors_group().user_set.values_list('email', flat=True)
 
     for pos in POS.objects.all():
         # If the POS is reinforced send an email to all directors
