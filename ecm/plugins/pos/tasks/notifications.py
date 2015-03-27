@@ -66,7 +66,7 @@ class Email(object):
         details = self._make_details(time_left, pos)
         send_mail(
             template['title'] % details,
-            (template['body'] % details) + '\t\n\r\n' + BASE_URL + pos.url(),
+            (template['body'] % details) + '\t\n\r\n' + BASE_URL + pos.url,
             settings.DEFAULT_FROM_EMAIL,
             [to]
         )
@@ -101,7 +101,7 @@ class Pushbullet(Email):
             data=json.dumps({
                 'email': to,
                 'type': 'link',
-                'url': BASE_URL + pos.url(),
+                'url': BASE_URL + pos.url,
                 'body': template['body'] % details,
                 'title': template['title'] % details
             })
@@ -174,6 +174,8 @@ def notify():
 
     directors = get_directors_group().user_set.values_list('email', flat=True)
 
+    offline_cutoff = datetime.datetime.now() - datetime.timedelta(days=14)
+
     for pos in POS.objects.all():
         # If the POS is reinforced send an email to all directors
         if pos.state == 3:
@@ -195,6 +197,18 @@ def notify():
         else:
             for notification in POSNotification.objects.filter(type=0, pos=pos, dismissed=False):
                 sender.dismiss(notification)
+
+        # Do not check fuel for unanchorded
+        if pos.state == 0:
+            continue
+
+        # If the POS is offline, and has been for more than 14 days,
+        #   do not send any notifications
+        if pos.state == 1:
+            if pos.state_timestamp < offline_cutoff:
+                for notification in POSNotification.objects.filter(type=1, pos=pos, dismissed=False):
+                    sender.dismiss(notification)
+                continue
 
         hours_left = getFuelValue(pos, pos.fuel_type_id, 'hours_int')
 
