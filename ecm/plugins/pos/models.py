@@ -219,7 +219,7 @@ class POSNotification(models.Model):
         0: 'REINFORCE',
         1: 'FUEL_LOW'
     }
-    types = models.SmallIntegerField(choices=TYPES.items(), db_index=True)
+    type = models.SmallIntegerField(choices=TYPES.items(), db_index=True)
 
     pos = models.ForeignKey(POS, db_index=True)
     internal_ident = models.CharField(max_length=14)
