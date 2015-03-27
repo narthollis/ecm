@@ -211,3 +211,22 @@ class FuelLevel(models.Model):
     def __unicode__(self):
         fuel_name = Type.objects.get(typeID=self.type_id)
         return u'%s: %d x %s' % (unicode(self.pos), self.quantity, fuel_name.typeName)
+
+
+
+class POSNotification(models.Model):
+    TYPES = {
+        0: 'REINFORCE',
+        1: 'FUEL_LOW'
+    }
+    types = models.SmallIntegerField(choices=TYPES.items(), db_index=True)
+
+    pos = models.ForeignKey(POS, db_index=True)
+    internal_ident = models.CharField(max_length=14)
+    to = models.CharField(max_length=128)
+
+    foreign_iden = models.CharField(max_length=12, default='', blank=True)
+    dismissed = models.BooleanField(default=False, db_index=True)
+
+    class Meta:
+        unique_together = (('pos', 'internal_ident', 'to'), )

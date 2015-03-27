@@ -62,6 +62,8 @@ USE_HTTPS = config.getboolean('misc', 'use_https')
 EVEAPI_STUB_ENABLED = config.getboolean('misc', 'eveapi_stub_enabled')
 EVEAPI_STUB_FILES_ROOT = config.get('misc', 'eveapi_stub_files_root')
 
+PUSHBULLET_KEY = config.get('misc', 'pushbullet_key')
+
 ###############################################################################
 ###################
 # DJANGO SETTINGS #

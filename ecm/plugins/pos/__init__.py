@@ -36,6 +36,12 @@ TASKS = [
         'frequency' : 6,
         'frequency_units' : 3600, # hour
     },
+    {
+        'function' : 'ecm.plugins.pos.tasks.notifications.notify',
+        'priority' : 105,
+        'frequency' : 6,
+        'frequency_units' : 3600, # hour
+    },
 ]
 
 URL_PERMISSIONS = [

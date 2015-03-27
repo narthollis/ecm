@@ -39,6 +39,7 @@ dependencies = [
     'django <= 1.5.7',
     'pytz',
     'pycrypto',
+    'requests'
 ]
 
 setup(
