@@ -37,7 +37,7 @@ from ecm.plugins.pos.views.pos_list import getFuelValue
 logger = logging.getLogger(__name__)
 
 # TODO: Localisation
-BASE_URL = ('https://' if settings.USE_HTTPS else 'http://') + settings.EXTERNAL_HOST_NAME + '/'
+BASE_URL = ('https://' if settings.USE_HTTPS else 'http://') + settings.EXTERNAL_HOST_NAME
 
 
 TEMPLATES = {
@@ -232,31 +232,33 @@ def notify():
             #  this will help save other POS managers needing to login
             for notification in POSNotification.objects.filter(type=1, pos=pos, dismissed=False):
                 sender.dismiss(notification)
+            continue
 
-        # If time left is zero we send out notifications once every hour,
-        #   so we store the time left as the current time
-        internal_ident = hours_left if hours_left > 0 else datetime.datetime.now().strftime('%Y%m%d%H')
-        current_notification = POSNotification.objects.filter(
-            type=1,
-            pos=pos,
-            dismissed=False,
-            internal_ident=internal_ident
-        )
+        if hours_left <= 48:
+            # If time left is zero we send out notifications once every hour,
+            #   so we store the time left as the current time
+            internal_ident = hours_left if hours_left > 0 else datetime.datetime.now().strftime('%Y%m%d%H')
+            current_notification = POSNotification.objects.filter(
+                type=1,
+                pos=pos,
+                dismissed=False,
+                internal_ident=internal_ident
+            )
 
-        if len(current_notification) == 0:
-            to_notify = set(pos.operators.values_list('email', flat=True))
+            if len(current_notification) == 0:
+                to_notify = set(pos.operators.values_list('email', flat=True))
 
-            # If this POS has run dry, _or_ if there are no configured operators for this POS
-            # then alert everyone with POS Fuel or Config roles
-            if hours_left == 0 or len(to_notify) == 0:
-                to_notify = to_notify | additional_at_zero
+                # If this POS has run dry, _or_ if there are no configured operators for this POS
+                # then alert everyone with POS Fuel or Config roles
+                if hours_left <= 0 or len(to_notify) == 0:
+                    to_notify = to_notify | additional_at_zero
 
-            for email in to_notify:
-                foreign_iden = sender.send(TEMPLATES['fuel'], email, hours_left, pos)
-                POSNotification(
-                    type=1,
-                    pos=pos,
-                    internal_ident=internal_ident,
-                    to=email,
-                    foreign_iden=foreign_iden
-                ).save()
+                for email in to_notify:
+                    foreign_iden = sender.send(TEMPLATES['fuel'], email, hours_left + ' hours', pos)
+                    POSNotification(
+                        type=1,
+                        pos=pos,
+                        internal_ident=internal_ident,
+                        to=email,
+                        foreign_iden=foreign_iden
+                    ).save()
