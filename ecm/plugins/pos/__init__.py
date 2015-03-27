@@ -39,7 +39,7 @@ TASKS = [
     {
         'function' : 'ecm.plugins.pos.tasks.notifications.notify',
         'priority' : 105,
-        'frequency' : 6,
+        'frequency' : 1,
         'frequency_units' : 3600, # hour
     },
 ]

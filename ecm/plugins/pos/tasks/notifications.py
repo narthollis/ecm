@@ -157,8 +157,8 @@ def notify():
     # Build a list of all users with POS roles to alert when a POS is at 0 hours left
     general_role = RoleType.objects.get(typeName="roles")
 
-    starbase_fuel = Role.objects.get(roleName="roleStarbaseConfig", type=general_role)
-    starbase_config = Role.objects.get(roleName="roleStarbaseConfig", type=general_role)
+    starbase_fuel = Role.objects.get(roleName="roleStarbaseConfig", roleType=general_role)
+    starbase_config = Role.objects.get(roleName="roleStarbaseConfig", roleType=general_role)
 
     additional_at_zero = set()
     for member in starbase_fuel.members_through_titles(with_direct_roles=True):
