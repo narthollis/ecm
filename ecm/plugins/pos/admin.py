@@ -20,7 +20,7 @@ __author__ = "JerryKhan"
 
 from django.contrib import admin
 
-from ecm.plugins.pos.models import POS, FuelLevel
+from ecm.plugins.pos.models import POS, FuelLevel, POSNotification
 
 #------------------------------------------------------------------------------
 class POSAdmin(admin.ModelAdmin):
@@ -39,5 +39,21 @@ class FuelLevelAdmin(admin.ModelAdmin):
                     'quantity']
 
 #------------------------------------------------------------------------------
+class POSNotificationAdmin(admin.ModelAdmin):
+    list_display = [
+        'type',
+        'pos',
+        'internal_ident',
+        'to']
+
+    readonly_fields = [
+        'type',
+        'pos',
+        'internal_ident',
+        'to',
+        'foreign_iden',
+        'dismissed']
+#------------------------------------------------------------------------------
 admin.site.register(POS, POSAdmin)
 admin.site.register(FuelLevel, FuelLevelAdmin)
+admin.site.register(POSNotification, POSNotificationAdmin)
