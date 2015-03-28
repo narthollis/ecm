@@ -253,8 +253,19 @@ def notify():
                 if hours_left <= 0 or len(to_notify) == 0:
                     to_notify = to_notify | additional_at_zero
 
+                logger.info("Sending %s fuel notification for %s to [%s]" % (
+                    hours_left,
+                    str(pos),
+                    ', '.join(to_notify))
+                )
+
                 for email in to_notify:
-                    foreign_iden = sender.send(TEMPLATES['fuel'], email, hours_left + ' hours', pos)
+                    foreign_iden = sender.send(
+                        TEMPLATES['fuel'],
+                        email,
+                        '%s hours' % (hours_left,),
+                        pos
+                    )
                     POSNotification(
                         type=1,
                         pos=pos,
