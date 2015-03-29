@@ -225,7 +225,7 @@ class POSNotification(models.Model):
     internal_ident = models.CharField(max_length=14)
     to = models.CharField(max_length=128)
 
-    foreign_iden = models.CharField(max_length=12, default='', blank=True)
+    foreign_iden = models.CharField(max_length=30, default='', blank=True)
     dismissed = models.BooleanField(default=False, db_index=True)
 
     class Meta:

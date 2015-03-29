@@ -90,8 +90,8 @@ class Pushbullet(Email):
 
         self.session = Session()
         self.session.headers.update({
-            'Authorization:':  'Bearer ' + key,
-            'Content-Type:': 'application/json'
+            'Authorization':  'Bearer ' + key,
+            'Content-Type': 'application/json'
         })
 
     def send(self, template, to, time_left, pos):
@@ -264,10 +264,11 @@ def notify():
                         '%s hours' % (hours_left,),
                         pos
                     )
-                    POSNotification(
-                        type=1,
-                        pos=pos,
-                        internal_ident=internal_ident,
-                        to=email,
-                        foreign_iden=foreign_iden
-                    ).save()
+                    if foreign_iden:
+                        POSNotification(
+                            type=1,
+                            pos=pos,
+                            internal_ident=internal_ident,
+                            to=email,
+                            foreign_iden=foreign_iden
+                        ).save()
