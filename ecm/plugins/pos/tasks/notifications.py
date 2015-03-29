@@ -114,7 +114,6 @@ class Pushbullet(Email):
         else:
             return resp.json()['iden']
 
-        resp.close()
         return result
 
     def dismiss(self, notification):
@@ -136,7 +135,6 @@ class Pushbullet(Email):
         else:
             logger.warning("Failed sending notification, " + resp.text)
 
-        resp.close()
         return result
 
 
