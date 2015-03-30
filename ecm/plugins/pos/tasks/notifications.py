@@ -112,14 +112,14 @@ class Pushbullet(Email):
         if resp.status_code != requests.codes.ok:
             logger.warning("Failed sending notification, " + resp.text)
         else:
-            return resp.json()['iden']
+            return resp.json['iden']
 
         return result
 
     def dismiss(self, notification):
         # Just in case someone changes from email to pushbullet after some notifications
         # Have been generated
-        if notification.pushbullet_id == "email":
+        if notification.foreign_iden == "email":
             return Email().dismiss(notification)
 
         resp = self.session.post(
