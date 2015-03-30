@@ -123,7 +123,7 @@ class Pushbullet(Email):
             return Email().dismiss(notification)
 
         resp = self.session.post(
-            'https://api.pushbullet.com/v2/pushes/' + notification.pushbullet_id,
+            'https://api.pushbullet.com/v2/pushes/' + notification.foreign_iden,
             data='{"dismissed": true}'
         )
 
